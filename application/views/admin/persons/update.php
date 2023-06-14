@@ -1,4 +1,4 @@
-<?php echo anchor('admin/person', 'Back'); ?>
+<?php echo anchor('admin/home', 'Back'); ?>
 <form action="<?= base_url('admin/person/update') ?>" method="post">
 	<table>
 		<tr>

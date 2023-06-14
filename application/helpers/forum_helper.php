@@ -5,8 +5,36 @@ function konfigurasi($title, $c_des=null)
     $CI = get_instance();
     $CI->load->model('Konfigurasi_model');
     $CI->load->model('Auth_model');
+    $CI->load->model('Lagu_model');
+    $CI->load->model('Person_model');
+    //$CI->load->helper('url');
+    $pengguna = $CI->Person_model->getUserLimit();
+    $lagulimit = $CI->Lagu_model->getLaguLimit();
+    $semuapengguna = $CI->Person_model->get_all();
     $auth = $CI->Auth_model->get_by_id('id');
     $site = $CI->Konfigurasi_model->listing();
+    $lagulist = $CI->Lagu_model->getAllLagu();
+    $lagusecond = $CI->Lagu_model->getSecondLaguData();
+    $laguthumb = $CI->Lagu_model->getImageById('id_lagu');
+    if ($lagusecond->num_rows() > 1) {
+        $results = $lagusecond->result_array();
+        unset($results[0]); // Menghapus data pertama dari array hasil query
+        $datalagu = array_values($results); // Mengatur ulang indeks array
+    }
+    $l_id = '1';
+    if ($CI->input->post('l_id')) {
+        $l_id = $CI->input->post('l_id');
+    }
+    $id_user = '1';
+    if ($CI->input->post('iduser')) {
+        $id_user = $CI->input->post('iduser');
+    }
+    //$l_id = $CI->input->post('l_id');
+    
+    $personal = $CI->Person_model->get_by_id($id_user);
+    $getlagu = $CI->Lagu_model->getSongById($l_id);
+    //$keyword = $CI->input->get('keyword');
+    //$carifungsi = $CI->Lagu_model->metode_pencarian($keyword);
     $data = array(
         'title' => $title.' | '.$site['nama_website'],
         'logo' => $site['logo'],
@@ -23,8 +51,65 @@ function konfigurasi($title, $c_des=null)
         'c_judul' => $title,
         'c_des' => $c_des,
         'userdata' => $auth,
+        'listlagu' => $lagulist,
+        'listsecond' => $datalagu,
+        'gambarlagu' => $laguthumb,
+        'daftarpengguna' => $pengguna,
+        'daftarsemuapengguna' => $semuapengguna,
+        'listlagulimit' => $lagulimit,
+        //'hasil_pencarian' => $carifungsi,
+
+        'l_getlagu' => $getlagu,
+        'l_judul' => $getlagu->judul_lagu,
+        'l_artist' => $getlagu->artist,
+        'l_album' => $getlagu->album,
+        'l_tahun' => $getlagu->tahun_rilis,
+        'l_tanggalupload' => $getlagu->tanggal_up,
+        'l_uploadwho' => $getlagu->upload_by,
+        'l_linkflac' => $getlagu->link_flac,
+        'l_linkmp3' => $getlagu->link_mp3,
+        'l_deskripsi' => $getlagu->deskripsi,
+        'l_thumb' => $getlagu->photo,
+
+        'u_get' => $personal->id,
+
     );
 
+    return $data;
+}
+
+function guest($title, $c_des=null){
+    $CI = get_instance();
+    $CI->load->model('Lagu_model');
+    $lagulist = $CI->Lagu_model->getSecondLaguData();
+    $laguthumb = $CI->Lagu_model->getImageById('id');
+    if ($lagulist->num_rows() > 1) {
+        $results = $lagulist->result_array();
+        unset($results[0]); // Menghapus data pertama dari array hasil query
+        $datalagu = array_values($results); // Mengatur ulang indeks array
+    }
+    $l_id = '1';
+    if ($CI->input->post('l_id')) {
+        $l_id = $CI->input->post('l_id');
+    }
+    $getlagu = $CI->Lagu_model->getSongById($l_id);
+    $data = array(
+        'listlagu' => $datalagu,
+        'gambarlagu' => $laguthumb, 
+        'user' => "Pengunjung",
+        'title' => "Forum MediaShare",
+
+        'l_judul' => $getlagu->judul_lagu,
+        'l_artist' => $getlagu->artist,
+        'l_album' => $getlagu->album,
+        'l_tahun' => $getlagu->tahun_rilis,
+        'l_tanggalupload' => $getlagu->tanggal_up,
+        'l_uploadwho' => $getlagu->upload_by,
+        'l_linkflac' => $getlagu->link_flac,
+        'l_linkmp3' => $getlagu->link_mp3,
+        'l_deskripsi' => $getlagu->deskripsi,
+        'l_thumb' => $getlagu->photo,
+    );
     return $data;
 }
 
@@ -33,9 +118,9 @@ function konfigurasi($title, $c_des=null)
 function show_msg($content='', $type='success', $icon='fa-info-circle', $size='14px')
 {
     if ($content != '') {
-        return  '<p class="box-msg">
-          <div class="info-box alert-' .$type .'">
-          <div class="info-box-icon">
+        return  '<p class="box-msg" style="background-color: #BFE3DF;">
+          <div class="info-box alert-' .$type .' rounded-4">
+          <div class="info-box-icon rounded-4">
           <i class="fa ' .$icon .'"></i>
           </div>
           <div class="info-box-content" style="font-size:' .$size .'">
@@ -50,8 +135,8 @@ function show_succ_msg($content='', $size='14px')
 {
     if ($content != '') {
         return   '<p class="box-msg">
-          <div class="info-box alert-success">
-          <div class="info-box-icon">
+          <div class="info-box rounded-4" style="background-color: #BFE3DF;">
+          <div class="info-box-icon rounded-4">
           <i class="fa fa-check-circle"></i>
           </div>
           <div class="info-box-content" style="font-size:' .$size .'">
@@ -66,8 +151,8 @@ function show_err_msg($content='', $size='14px')
 {
     if ($content != '') {
         return   '<p class="box-msg">
-          <div class="info-box alert-error">
-          <div class="info-box-icon">
+          <div class="info-box rounded-4" style="background-color: #BFE3DF;">
+          <div class="info-box-icon rounded-4">
           <i class="fa fa-warning"></i>
           </div>
           <div class="info-box-content" style="font-size:' .$size .'">
@@ -82,7 +167,7 @@ function show_err_form_msg($content='', $size='14px')
 {
     if ($content != '') {
         return   '<div class="box-body" style="text-align:center">
-          <div class="alert alert-danger alert-dismissible">'
+          <div class="alert alert-dismissible rounded-4" style="background-color: #BFE3DF;">'
           .$content.
           '</div>
           </div>';
@@ -91,7 +176,7 @@ function show_err_form_msg($content='', $size='14px')
 
 function alert($class, $title, $description)
 {
-    return '<div class="alert '.$class.' alert-dismissible">
+    return '<div class="alert '.$class.' alert-dismissible rounded-4" style="background-color: #BFE3DF;">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
       <h4><i class="icon fa fa-ban"></i> '.$title.'</h4>
       '.$description.'

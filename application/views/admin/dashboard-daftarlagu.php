@@ -8,7 +8,7 @@
         margin-left: ;
     }
     .forum-kotak1{
-        background-color: #ABC1C9;
+        background-color: white;
         margin-top: 20px;
     }
     .table-responsive{
@@ -17,61 +17,14 @@
         border-color: white;
     }
     .table{
-        text-align: center; background-color: #BFE3DF;
+        text-align: center; 
+        background-color: #BFE3DF;
     }
     
 
 </style>
-<div class="peringatan msg" style="display:none;">
-	<?= @$this->session->flashdata('msg'); ?>
-</div>
 <div class="kotak container">
     <div class="forum-kotak container col-13 rounded-4">
-        <div class="forum1 row">
-            <div class="col-12">
-                <div class="table-responsive my-4 mx-2">
-                    <div class="page-header">
-                        <div class="col-12">
-                            <div class="row">
-                                <div class="col-2">
-                                    <span class="m-2 rounded-3 p-2" style="text-align: center; background-color: #BFE3DF;">Data User</span>
-                                </div>
-                                <div class="col-2 offset-8">
-                                    <a class="btn text-black rounded-3" href="<?php echo base_url('admin/home/allaccount'); ?>" style="text-align: center; background-color: #BFE3DF;"><i class="mt-2">Tampilkan Semua</i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <table class="table mt-3 fs-6">
-                        <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Email</th>
-                            <th>Role ID</th>
-                            <th>Username</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        $i = 1;
-                        foreach ($daftarpengguna as $a) { ?>
-                            <tr>
-                            <td><?= $i++; ?></td>
-                            <td><?= $a['nama']; ?></td>
-                            <td><?= $a['email']; ?></td>
-                            <td><?= $a['id_role']; ?></td>
-                            <td><?= $a['username']; ?></td>
-                            </tr>
-                        <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="forum-kotak1 container col-13 rounded-4">
         <div class="forum1 row">
             <div class="col-12">
                 <div class="table-responsive my-4 mx-2">
@@ -82,7 +35,7 @@
                                     <span class="m-2 rounded-3 p-2" style="text-align: center; background-color: #BFE3DF;">Data Lagu</span>
                                 </div>
                                 <div class="col-2 offset-8">
-                                    <a class="btn text-black rounded-3" href="<?php echo base_url('admin/home/allsongs'); ?>" style="text-align: center; background-color: #BFE3DF;"><i class="mt-2">Tampilkan Semua</i></a>
+                                    <a class="btn text-black rounded-3" href="<?php echo base_url('admin/home/'); ?>" style="text-align: center; background-color: #BFE3DF;"><i class="mt-2">Kembali</i></a>
                                 </div>
                             </div>
                         </div>
@@ -99,12 +52,13 @@
                             <th>Diupload Oleh</th>
                             <th>Link FLAC</th>
                             <th>Link MP3</th>
+                            <th>Aksi</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php
                         $i = 1;
-                        foreach ($listlagulimit as $b) { ?>
+                        foreach ($listlagu as $b) { ?>
                             <tr>
                             <td><?= $i++; ?></td>
                             <td><?= $b['judul_lagu']; ?></td>
@@ -115,6 +69,11 @@
                             <td><?= $b['upload_by']; ?></td>
                             <td><a href="<?= $b['link_flac']; ?>">Klik Link</a></td>
                             <td><a href="<?= $b['link_mp3']; ?>">Klik Link</a></td>
+                            <td>
+                                <form class="form-horizontal mt-2" action="<?php echo base_url('auth/delsong') ?>" method="POST" enctype="multipart/form-data">
+                                    <button type="submit" name="idlagudel" id="idlagudel" value="<?= $b['id_lagu']; ?>" class="btn text-blue" style="box-sizing: border-box; border: none; height: auto; width: auto; background-color: none;">Hapus Lagu</button>
+                                </form>
+                            </td>
                             </tr>
                         <?php } ?>
                         </tbody>
@@ -123,5 +82,4 @@
             </div>
         </div>
     </div>
-
 </div>

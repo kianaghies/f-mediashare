@@ -33,6 +33,20 @@ class Auth_model extends CI_Model
         return $query->row();
     }
 
+    public function getUsername()
+    {
+        $id = $this->session->userdata('id');
+        $this->db->select('
+            user.*, user.username,
+        ');
+        $this->db->join('user', 'user.username = lagu.upload_by');
+        $this->db->from($this->table);
+        $this->db->where($this->id, $id);
+        $query = $this->db->get();
+
+        return $query->row();
+    }
+
     public function reg()
     {
       date_default_timezone_set('ASIA/JAKARTA');
@@ -81,4 +95,7 @@ class Auth_model extends CI_Model
         $this->db->where($this->id, $id);
         $this->db->update($this->table, $date);
     }
+
+
+
 }

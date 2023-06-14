@@ -1,11 +1,6 @@
-<header class="main-header">
-  <!-- Logo -->
-  <a href="<?php echo base_url(); ?>" class="logo">
-    <!-- mini logo for sidebar mini 50x50 pixels -->
-    <span class="logo-mini"><small><b>FMS</b></small></span>
-    <!-- logo for regular state and mobile devices -->
-    <span class="logo-lg"><b>Form Media Share</b></span>
-  </a>
-  <!-- nav -->
-  <?php require_once('_nav.php') ;?>
-</header>
+<div class="container">
+  <nav class="navbar" style="padding: 0px 0px;">
+      <a class="navbar-brand p-3 rounded-4" href="#" style="box-sizing: border-box; border: none; height: auto; width: auto; background-color: #BFE3DF;">Forum MediaShare</a>
+  </nav>
+</div>
+

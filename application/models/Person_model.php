@@ -21,9 +21,7 @@ class Person_model extends CI_Model
 
     public function get_all()
     {
-        $this->db->from($this->table);
-        $query = $this->db->get();
-        return $query->result();
+        return $this->db->get('user')->result_array();
     }
 
     public function insert($data)
@@ -38,6 +36,13 @@ class Person_model extends CI_Model
         return $this->db->affected_rows();
     }
 
+    public function updatePass($data, $id)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->update($this->table, $data);
+        return $this->db->affected_rows();
+	}
+
     public function delete($id)
     {
         $this->db->where($this->id, $id);
@@ -49,7 +54,7 @@ class Person_model extends CI_Model
         $this->db->select('*');
         $this->db->from('user');
         $this->db->limit(10, 0);
-        return $this->db->get();
+        return $this->db->get()->result_array();
     }
 }
 
